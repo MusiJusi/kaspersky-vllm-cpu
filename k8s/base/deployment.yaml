@@ -15,6 +15,7 @@ spec:
         app: vllm
     spec:
       automountServiceAccountToken: false
+      enableServiceLinks: false
       terminationGracePeriodSeconds: 60
       securityContext:
         runAsNonRoot: true

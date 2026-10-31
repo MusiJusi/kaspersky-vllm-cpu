@@ -74,6 +74,7 @@ def offline_cache_check(context, deployment):
         "metadata": {"name": name},
         "spec": {"backoffLimit": 0, "ttlSecondsAfterFinished": 300, "template": {"spec": {
             "restartPolicy": "Never", "automountServiceAccountToken": False,
+            "enableServiceLinks": False,
             "securityContext": template["securityContext"],
             "containers": [downloader],
             "volumes": [volume for volume in template["volumes"] if volume["name"] in {"models", "init-tmp"}],
