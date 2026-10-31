@@ -18,6 +18,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
+      - name: Free disk space on the disposable runner
+        run: |
+          # These preinstalled SDKs are unused by this Python/Docker job.
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet
+          df -h /
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -46,6 +51,8 @@ jobs:
           docker build -t kaspersky-model-downloader:dev -f downloader/Dockerfile .
           docker build -t kaspersky-vllm-cpu:dev -f Dockerfile .
           docker run --rm --entrypoint python kaspersky-vllm-cpu:dev -c "import os,torch,importlib.metadata; assert os.getuid()==10001; assert torch.version.cuda is None; print(importlib.metadata.version('vllm')); print(torch.__version__)"
+          docker builder prune --force
+          df -h /
       - name: Create Minikube cluster and deploy
         run: |
           minikube start -p kaspersky-vllm-cpu --driver=docker --cpus=2 --memory=5200 --kubernetes-version=v1.37.0 --keep-context
