@@ -1,0 +1,41 @@
+# Local assignment files and submission documents
+*.docx
+*.pdf
+
+# Credentials: commit examples only
+.env
+.env.*
+!.env.example
+!*.env.example
+secrets.env
+*.local.env
+**/secret.local.*
+*.pem
+*.key
+
+# Downloaded model files and caches
+models/
+.cache/
+*.safetensors
+*.gguf
+*.bin
+
+# Python and local environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Machine-specific files and raw runtime output
+.local/
+.tmp/
+*.log
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
