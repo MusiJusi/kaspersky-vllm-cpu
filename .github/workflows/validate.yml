@@ -54,7 +54,7 @@ jobs:
           python -c "import secrets,pathlib; pathlib.Path('.local/api-token').write_text(secrets.token_urlsafe(32))"
           kubectl --context kaspersky-vllm-cpu -n llm-inference create secret generic vllm-secrets --from-file=api-token=.local/api-token --from-literal=hf-token=
           kubectl --context kaspersky-vllm-cpu apply -k k8s/overlays/ci
-          kubectl --context kaspersky-vllm-cpu -n llm-inference rollout status deployment/vllm --timeout=15m
+          python scripts/wait_ready.py
       - name: Endpoint, privacy, offline cache, benchmark and restart
         run: |
           python scripts/check_cluster.py --benchmark

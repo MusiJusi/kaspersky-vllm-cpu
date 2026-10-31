@@ -8,7 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     HF_HOME=/tmp/huggingface \
     VLLM_TARGET_DEVICE=cpu \
     VLLM_NO_USAGE_STATS=1 \
-    VLLM_LOGGING_CONFIG_PATH=/app/config/logging.json
+    VLLM_CONFIGURE_LOGGING=0 \
+    APP_LOGGING_CONFIG=/app/config/logging.json
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libnuma1 libgomp1 libtcmalloc-minimal4 \
@@ -17,8 +18,8 @@ RUN apt-get update \
 COPY requirements.txt /app/requirements.txt
 RUN --mount=type=cache,target=/root/.cache/uv \
     LD_PRELOAD= python -m pip install --no-cache-dir --no-deps uv==0.13.6 \
-    && LD_PRELOAD= uv pip install --system --require-hashes --torch-backend cpu -r /app/requirements.txt \
-    && LD_PRELOAD= python -m pip check
+    && LD_PRELOAD= uv pip sync --system --require-hashes --torch-backend cpu /app/requirements.txt \
+    && LD_PRELOAD= uv pip check
 
 RUN groupadd --gid 10001 inference \
     && useradd --uid 10001 --gid 10001 --no-create-home --home-dir /tmp/home inference \

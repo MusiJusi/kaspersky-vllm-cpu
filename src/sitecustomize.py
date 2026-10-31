@@ -11,12 +11,13 @@ from pathlib import Path
 
 def private_exception_hook(error_type, error, traceback):
     logging.getLogger("app.audit").error(
-        "runtime_failure", extra={"event": "runtime_failure"}
+        "runtime_failure", extra={"event": "runtime_failure"},
+        exc_info=(error_type, error, traceback),
     )
 
 
 try:
-    config_path = os.environ.get("VLLM_LOGGING_CONFIG_PATH")
+    config_path = os.environ.get("APP_LOGGING_CONFIG")
     if config_path:
         logging.config.dictConfig(json.loads(Path(config_path).read_text(encoding="utf-8")))
         logging.captureWarnings(True)

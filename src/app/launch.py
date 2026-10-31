@@ -40,7 +40,7 @@ def inference_arguments(settings: dict) -> list[str]:
 
 
 def main() -> int:
-    logging_path = os.environ.get("VLLM_LOGGING_CONFIG_PATH", "/app/config/logging.json")
+    logging_path = os.environ.get("APP_LOGGING_CONFIG", "/app/config/logging.json")
     logging.config.dictConfig(json.loads(Path(logging_path).read_text(encoding="utf-8")))
     logger = logging.getLogger("app.audit")
     try:
@@ -68,12 +68,14 @@ def main() -> int:
             "VLLM_NO_USAGE_STATS": "1", "DO_NOT_TRACK": "1",
             "VLLM_DEBUG_LOG_API_SERVER_RESPONSE": "0", "VLLM_SERVER_DEV_MODE": "0",
             "VLLM_LOGGING_LEVEL": "INFO", "VLLM_TARGET_DEVICE": "cpu",
+            "VLLM_CONFIGURE_LOGGING": "0",
         })
         os.environ.pop("HF_TOKEN", None)
+        os.environ.pop("VLLM_LOGGING_CONFIG_PATH", None)
         logger.info("service_start", extra={"event": "service_start"})
         os.execv(sys.executable, command)
     except Exception:
-        logger.error("service_config_error", extra={"event": "service_config_error"})
+        logger.exception("service_config_error", extra={"event": "service_config_error"})
         return 1
 
 

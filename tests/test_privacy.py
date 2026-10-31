@@ -2,13 +2,40 @@ import asyncio
 import io
 import json
 import logging
+import os
+import subprocess
+import sys
+import tempfile
 import unittest
+from pathlib import Path
 
 from app.audit import RequestAuditMiddleware
 from app.safe_logging import SafeJsonFormatter
 
 
 class PrivacyTests(unittest.TestCase):
+    def test_python_startup_sanitizes_warnings_and_unhandled_exceptions(self):
+        secret = "PRIVATE_WARNING_AND_EXCEPTION_CONTENT"
+        configuration = {
+            "version": 1,
+            "formatters": {"safe": {"()": "app.safe_logging.SafeJsonFormatter"}},
+            "handlers": {"safe": {"class": "logging.StreamHandler", "formatter": "safe"}},
+            "root": {"level": "INFO", "handlers": ["safe"]},
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            config = Path(temporary) / "logging.json"
+            config.write_text(json.dumps(configuration))
+            result = subprocess.run(
+                [sys.executable, "-c", f"import warnings; warnings.warn('{secret}'); raise ValueError('{secret}')"],
+                env={**os.environ, "APP_LOGGING_CONFIG": str(config)},
+                capture_output=True, text=True,
+            )
+        self.assertEqual(result.returncode, 1)
+        self.assertNotIn(secret, result.stdout + result.stderr)
+        events = [json.loads(line)["event"] for line in result.stderr.splitlines()]
+        self.assertIn("runtime_log", events)
+        self.assertIn("runtime_failure", events)
+
     def test_upstream_messages_arguments_and_tracebacks_are_not_rendered(self):
         output = io.StringIO()
         handler = logging.StreamHandler(output)
