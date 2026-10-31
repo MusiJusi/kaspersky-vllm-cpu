@@ -1,0 +1,20 @@
+{
+  "commit": "ee1c86a74fb0a9d9df4cb87f0ac551224dd43fc1",
+  "cpu": "AMD EPYC 7763 64-Core Processor",
+  "cluster_cpus": 2,
+  "cluster_memory_mib": 5200,
+  "dtype": "float32",
+  "vllm": "0.27.1+cpu",
+  "python": "3.12.12",
+  "inference": {
+    "served_model_name": "local-instruct",
+    "dtype": "float32",
+    "max_model_len": 2048,
+    "max_num_seqs": 2,
+    "max_num_batched_tokens": 2048,
+    "enable_prefix_caching": true,
+    "enable_chunked_prefill": true,
+    "enforce_eager": true
+  },
+  "model": "MODEL_ID=HuggingFaceTB/SmolLM2-135M-Instruct\nMODEL_REVISION=12fd25f77366fa6b3b4b768ec3050bf629380bac\nMODEL_ROOT=/models\n"
+}

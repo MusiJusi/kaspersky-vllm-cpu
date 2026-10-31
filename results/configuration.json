@@ -1,0 +1,10 @@
+{
+    "configmap_update":  "passed",
+    "parameter":  "max_num_seqs",
+    "original":  4,
+    "tested":  3,
+    "observed":  3,
+    "restored":  4,
+    "same_image":  true,
+    "method":  "kubectl patch ConfigMap and rollout restart; original value restored"
+}

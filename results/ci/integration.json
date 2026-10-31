@@ -1,0 +1,7 @@
+{
+  "endpoint": "passed",
+  "log_privacy": "passed",
+  "offline_cache": "passed",
+  "pod_restart": "passed",
+  "post_restart_endpoint": "passed"
+}

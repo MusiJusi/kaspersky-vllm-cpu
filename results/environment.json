@@ -1,0 +1,47 @@
+{
+  "recorded_at_utc": "2026-10-31T20:29:22.270817+00:00",
+  "source_commit": "ee1c86a74fb0a9d9df4cb87f0ac551224dd43fc1",
+  "cpu": "AMD Ryzen 9 9955HX 16-Core Processor",
+  "docker_vm_cpus": 32,
+  "docker_vm_memory_gib": 15.2,
+  "minikube_cpus": 6,
+  "minikube_memory_mib": 10240,
+  "kubernetes": "v1.37.0",
+  "container_runtime": "containerd://2.3.4",
+  "inference_runtime": {
+    "python": "3.12.12",
+    "vllm": "0.27.1+cpu",
+    "torch": "2.13.0+cpu",
+    "backend": "cpu",
+    "cuda": null,
+    "uid": 10001
+  },
+  "resources": {
+    "limits": {
+      "cpu": "6",
+      "memory": "8Gi"
+    },
+    "requests": {
+      "cpu": "2",
+      "memory": "4Gi"
+    }
+  },
+  "image_id": "sha256:80b05c159624b9a5338579f53337d1a0a34feee8d1553116fe48fe0d7d7397cc",
+  "model_id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "inference": {
+    "served_model_name": "local-instruct",
+    "dtype": "bfloat16",
+    "max_model_len": 2048,
+    "max_num_seqs": 4,
+    "max_num_batched_tokens": 2048,
+    "enable_prefix_caching": true,
+    "enable_chunked_prefill": true,
+    "enforce_eager": true
+  },
+  "omp_num_threads": "6",
+  "omp_binding": "auto",
+  "kv_cache_gib": "1",
+  "benchmark_client_python": "3.14.6",
+  "local_cache_setup": "PVC seeded from the snapshot downloaded and verified by the rootless Docker downloader; cold PVC download is checked separately in CI"
+}
