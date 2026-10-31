@@ -1,0 +1,12 @@
+*
+!Dockerfile
+!requirements.txt
+!downloader/
+!downloader/Dockerfile
+!downloader/requirements.txt
+!src/
+!src/**
+!config/
+!config/**
+**/__pycache__/
+**/*.pyc

@@ -1,0 +1,10 @@
+{
+  "served_model_name": "local-instruct",
+  "dtype": "float32",
+  "max_model_len": 2048,
+  "max_num_seqs": 2,
+  "max_num_batched_tokens": 2048,
+  "enable_prefix_caching": true,
+  "enable_chunked_prefill": true,
+  "enforce_eager": true
+}

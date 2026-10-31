@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+configMapGenerator:
+  - name: vllm-settings
+    behavior: merge
+    literals:
+      - OMP_NUM_THREADS=2
+      - VLLM_CPU_OMP_THREADS_BIND=nobind
+    files:
+      - inference.json=inference.json
+patches:
+  - path: resources.yaml

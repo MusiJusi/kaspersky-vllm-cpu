@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "safe": {"()": "app.safe_logging.SafeJsonFormatter"}
+  },
+  "handlers": {
+    "safe": {
+      "class": "logging.StreamHandler",
+      "stream": "ext://sys.stderr",
+      "formatter": "safe"
+    }
+  },
+  "root": {"level": "INFO", "handlers": ["safe"]},
+  "loggers": {
+    "vllm": {"level": "INFO", "handlers": ["safe"], "propagate": false},
+    "uvicorn": {"level": "INFO", "handlers": ["safe"], "propagate": false},
+    "uvicorn.error": {"level": "INFO", "handlers": ["safe"], "propagate": false},
+    "uvicorn.access": {"level": "INFO", "handlers": ["safe"], "propagate": false},
+    "app.audit": {"level": "INFO", "handlers": ["safe"], "propagate": false}
+  }
+}

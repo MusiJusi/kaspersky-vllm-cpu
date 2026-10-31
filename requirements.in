@@ -1,0 +1,3 @@
+# Linux amd64, Python 3.12. Never replace this with the CUDA wheel from PyPI.
+vllm @ https://github.com/vllm-project/vllm/releases/download/v0.27.1/vllm-0.27.1%2Bcpu-cp38-abi3-manylinux_2_34_x86_64.whl
+uv==0.13.6

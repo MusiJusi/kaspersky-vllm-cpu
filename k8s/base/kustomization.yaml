@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: llm-inference
+resources:
+  - namespace.yaml
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+configMapGenerator:
+  - name: vllm-settings
+    envs:
+      - config/model.env
+      - config/runtime.env
+    files:
+      - inference.json=config/inference.json
