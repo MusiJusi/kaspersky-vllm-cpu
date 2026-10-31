@@ -60,6 +60,7 @@ def main() -> int:
             *inference_arguments(settings),
             "--no-enable-log-requests", "--no-enable-log-outputs", "--no-log-error-stack",
             "--disable-uvicorn-access-log",
+            "--middleware", "app.auth.BearerAuthMiddleware",
             "--middleware", "app.audit.RequestAuditMiddleware",
             "--log-config-file", logging_path,
         ]
