@@ -23,7 +23,8 @@ foreach ($taskCommand in @('git', 'docker', 'kubectl')) {
     }
 }
 
-if (Get-Command minikube -ErrorAction SilentlyContinue) {
+$taskLocalMinikube = Join-Path (Split-Path -Parent $PSScriptRoot) '.local\bin\minikube.exe'
+if ((Get-Command minikube -ErrorAction SilentlyContinue) -or (Test-Path -LiteralPath $taskLocalMinikube)) {
     Write-Check 'OK' 'Minikube is installed.'
 } else {
     Write-Check 'INFO' 'Minikube is unavailable. Install it for the planned local setup, or use an existing Kubernetes cluster.'

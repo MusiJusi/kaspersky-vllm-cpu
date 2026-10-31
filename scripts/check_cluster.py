@@ -58,6 +58,10 @@ def offline_cache_check(context, deployment):
     template = deployment["spec"]["template"]["spec"]
     downloader = copy.deepcopy(template["initContainers"][0])
     downloader["name"] = "cache-check"
+    downloader["resources"] = {
+        "requests": {"cpu": "10m", "memory": "64Mi"},
+        "limits": {"cpu": "1", "memory": "256Mi"},
+    }
     downloader["env"] = [
         {"name": "HF_HUB_OFFLINE", "value": "1"},
         {"name": "HF_ENDPOINT", "value": "http://127.0.0.1:9"},
@@ -86,6 +90,13 @@ def offline_cache_check(context, deployment):
         logs = kubectl(context, "logs", "job/" + name)
         if not any(json.loads(line).get("event") == "model_cache_hit" for line in logs.splitlines() if line.startswith("{")):
             raise RuntimeError("The offline Job did not use the completed local snapshot.")
+    except subprocess.CalledProcessError as error:
+        pods = json.loads(kubectl(context, "get", "pods", "-l", "job-name=" + name, "-o", "json"))
+        reasons = [condition.get("message", condition.get("reason", "unknown"))
+                   for pod in pods["items"]
+                   for condition in pod.get("status", {}).get("conditions", [])
+                   if condition.get("type") == "PodScheduled" and condition.get("status") == "False"]
+        raise RuntimeError("The offline cache Job failed. " + " ".join(reasons)) from error
     finally:
         kubectl(context, "delete", "job", name, "--wait=false")
 

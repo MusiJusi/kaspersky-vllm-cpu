@@ -28,7 +28,16 @@ try {
         Invoke-Checked 'docker' @('build', '--tag', 'kaspersky-model-downloader:dev', '--file', 'downloader/Dockerfile', '.')
         Invoke-Checked 'docker' @('build', '--tag', 'kaspersky-vllm-cpu:dev', '--file', 'Dockerfile', '.')
     }
-    Invoke-Checked $taskMinikube @('start', '--profile', $ClusterProfile, '--driver=docker', '--keep-context', ('--cpus=' + $Cpus), ('--memory=' + $MemoryMB))
+    $taskClusterRunning = $false
+    try {
+        & $taskMinikube status --profile $ClusterProfile *> $null
+        $taskClusterRunning = ($LASTEXITCODE -eq 0)
+    } catch {
+        $taskClusterRunning = $false
+    }
+    if (-not $taskClusterRunning) {
+        Invoke-Checked $taskMinikube @('start', '--profile', $ClusterProfile, '--driver=docker', '--keep-context', ('--cpus=' + $Cpus), ('--memory=' + $MemoryMB))
+    }
     Invoke-Checked $taskMinikube @('image', 'load', '--profile', $ClusterProfile, 'kaspersky-model-downloader:dev', 'kaspersky-vllm-cpu:dev')
 
     $taskNamespace = 'llm-inference'

@@ -3,6 +3,9 @@ name: Validate CPU inference
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'results/**'
   pull_request:
   workflow_dispatch:
 
