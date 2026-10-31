@@ -56,7 +56,12 @@ try {
     # Secret values travel through stdin, never command-line arguments or stdout.
     $taskSecret | kubectl --context $ClusterProfile apply -f -
     if ($LASTEXITCODE -ne 0) { throw 'Secret creation failed.' }
+    $taskExistingDeployment = @(kubectl --context $ClusterProfile --namespace $taskNamespace get deployment vllm --ignore-not-found -o name)
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect the current deployment.' }
     Invoke-Checked 'kubectl' @('--context', $ClusterProfile, 'apply', '-k', 'k8s/overlays/local')
+    if ($taskExistingDeployment.Count -gt 0) {
+        Invoke-Checked 'kubectl' @('--context', $ClusterProfile, '--namespace', $taskNamespace, 'rollout', 'restart', 'deployment/vllm')
+    }
     Invoke-Checked 'kubectl' @('--context', $ClusterProfile, '--namespace', $taskNamespace, 'rollout', 'status', 'deployment/vllm', '--timeout=15m')
     Write-Host ('Ready. API token is stored locally in .local/api-token. Forward the API with: kubectl --context {0} -n llm-inference port-forward service/vllm 8000:8000' -f $ClusterProfile)
 } finally {

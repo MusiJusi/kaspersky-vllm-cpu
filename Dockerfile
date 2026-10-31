@@ -16,9 +16,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/requirements.txt
-RUN --mount=type=cache,target=/root/.cache/uv \
+ARG UV_OFFLINE=0
+RUN --mount=type=cache,id=kaspersky-vllm-uv,target=/root/.cache/uv \
     LD_PRELOAD= python -m pip install --no-cache-dir --no-deps uv==0.13.6 \
-    && LD_PRELOAD= uv pip sync --system --require-hashes --torch-backend cpu /app/requirements.txt \
+    && LD_PRELOAD= UV_CACHE_DIR=/root/.cache/uv uv pip sync --system --require-hashes --torch-backend cpu --link-mode copy /app/requirements.txt \
     && LD_PRELOAD= uv pip check
 
 RUN groupadd --gid 10001 inference \

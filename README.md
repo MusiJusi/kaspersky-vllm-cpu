@@ -81,6 +81,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-local.ps1
 Скрипт собирает образы, создаёт отдельный кластер `kaspersky-vllm-cpu`,
 загружает образы в кластер, создаёт Secret, применяет манифесты и ждёт готовности.
 Все команды явно выбирают кластер проекта. Повторный запуск с готовыми образами:
+Существующий Deployment перезапускается, чтобы использовать актуальные локальные образы.
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-local.ps1 -SkipBuild
@@ -268,6 +269,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\lock.ps1
 
 Для uv внутри проекта добавьте `-Uv .\.local\tools\bin\uv.exe`.
 При установке основного образа явно указан `--torch-backend cpu`.
+Кэш uv хранится в отдельном BuildKit cache mount и не входит в образ.
+`--link-mode copy` исключает зависимость установленных файлов от этого mount.
+При заранее заполненном кэше установка зависимостей может выполняться с
+`docker build --build-arg UV_OFFLINE=1 -t kaspersky-vllm-cpu:dev .`.
+Загрузка bootstrap-инструмента uv и системных пакетов при этом всё ещё может
+требовать сеть; параметр относится к установке Python-зависимостей из lock-файла.
 После обновления повторно проверяются сборка и инференс.
 
 ## Источники
