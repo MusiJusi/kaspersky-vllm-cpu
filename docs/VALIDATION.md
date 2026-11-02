@@ -1,6 +1,6 @@
 # Проверки решения
 
-Локальная проверка выполнена 31 октября 2026 года на Ryzen 9 9955HX,
+Базовая локальная проверка выполнена 31 октября 2026 года на Ryzen 9 9955HX,
 Linux engine Docker Desktop, Minikube 1.39.0, Kubernetes 1.37.0.
 Версии, image ID, revision модели, настройки и ресурсы сохранены
 в [environment.json](../results/environment.json).
@@ -25,7 +25,7 @@ Linux engine Docker Desktop, Minikube 1.39.0, Kubernetes 1.37.0.
 | ConfigMap без пересборки | `max_num_seqs`: 4 → 3 → 4; значение 3 подтверждено в `/proc/1/cmdline`, image ID не изменился |
 | Нагрузка | По 8 streaming-запросов для короткого и длинного ввода; таблица в README |
 
-Машиночитаемые результаты: [integration.json](../results/integration.json),
+Машиночитаемые результаты базового прогона: [integration.json](../results/integration.json),
 [configuration.json](../results/configuration.json),
 [benchmark.json](../results/benchmark.json).
 
@@ -38,9 +38,27 @@ Docker volume. Холодный запуск на пустом PVC отдель�
 Выбрана общедоступная модель: HF-токен пустой; передача через Secret настроена,
 загрузка gated-модели с личным HF-токеном в этот прогон не входила.
 
+## Расширенные нагрузочные измерения
+
+2 ноября 2026 года на том же локальном CPU-профиле выполнены 300 измерений:
+по 50 для короткого и длинного ввода при параллелизме 1, 2 и 4.
+Перед каждой серией выполнены 3 отдельных запроса прогрева. Все 300 запросов
+успешны, каждый сгенерировал ровно 32 токена (`ignore_eos=true`).
+
+Версия нагрузочного кода: `e05a3ec6e734bd572e431cad05678a13d382a602`.
+Конфигурация, image ID, Pod UID и число рестартов во время измерений
+не изменились. До и после нагрузки успешно выполнены проверки
+аутентификации, генерации, streaming, ошибок валидации и приватности логов.
+Агрегаты независимо пересчитаны по всем отдельным измерениям.
+
+- [Исходные измерения](../results/extended/benchmark.json).
+- [Фактическое окружение и конфигурация](../results/extended/environment.json).
+- [Проверки до и после нагрузки](../results/extended/checks.json).
+- [Методика, команда воспроизведения и ограничения](BENCHMARK.md).
+
 ## Unit-тесты
 
-Все 14 тестов пройдены внутри Linux-контейнера с read-only root filesystem
+Все 17 тестов пройдены внутри Linux-контейнера с read-only root filesystem
 и `--network none`. Проверяются:
 
 - защита основных и вспомогательных API, правильный и неправильный токен;
@@ -49,7 +67,9 @@ Docker volume. Холодный запуск на пустом PVC отдель�
 - запрет переопределения безопасности через параметры инференса;
 - целостность snapshot, смена revision, незавершённая загрузка;
 - отклонение путей за пределами snapshot и mutable revision;
-- путь готового кэша при запрещённом импорте Hugging Face.
+- путь готового кэша при запрещённом импорте Hugging Face;
+- нагрузочный скрипт: уникальность запросов между сериями, фиксированная длина
+  выхода, отклонение незавершённого SSE, учёт ошибок без приватных данных.
 
 Команда для Linux shell:
 
@@ -57,6 +77,8 @@ Docker volume. Холодный запуск на пустом PVC отдель�
 docker run --rm --network none --read-only --tmpfs /tmp \
   --mount type=bind,source="$PWD/src",target=/app,readonly \
   --mount type=bind,source="$PWD/tests",target=/tests,readonly \
+  --mount type=bind,source="$PWD/scripts",target=/scripts,readonly \
+  --env PYTHONPATH=/app:/ \
   --entrypoint python kaspersky-model-downloader:dev \
   -m unittest discover -s /tests -v
 ```
@@ -79,7 +101,7 @@ python scripts/check_cluster.py --benchmark
 проверяются сборка обоих образов, холодный запуск в Minikube, API и приватность,
 нагрузка, offline-кэш и перезапуск Pod.
 
-[Успешный прогон](https://github.com/MusiJusi/kaspersky-vllm-cpu/actions/runs/41238914657)
+[Базовый успешный прогон](https://github.com/MusiJusi/kaspersky-vllm-cpu/actions/runs/41238914657)
 проверил commit `ee1c86a74fb0a9d9df4cb87f0ac551224dd43fc1`.
 Конфигурация: AMD EPYC 7763, limit 2 CPU, float32, контекст 2048,
 `max_num_seqs=2`. Артефакт `cpu-validation-results` сохранён в репозитории:
@@ -91,3 +113,11 @@ python scripts/check_cluster.py --benchmark
 
 Локальная таблица в README относится к отдельному BF16-профилю с limit 6 CPU;
 условия каждого прогона зафиксированы отдельно.
+
+После расширения нагрузочного скрипта выполнен новый
+[полный успешный прогон CI](https://github.com/MusiJusi/kaspersky-vllm-cpu/actions/runs/41511651299)
+на commit `e05a3ec6e734bd572e431cad05678a13d382a602`: 17 unit-тестов,
+сборка обоих образов, холодный старт, API, приватность, короткий нагрузочный
+прогон, offline-кэш и перезапуск Pod. [Подтверждение статуса и этапов](../results/extended/ci.json).
+CI использует прежний режим из 8 запросов на сценарий с естественным EOS;
+матрица из 300 измерений выполнена локально и хранится отдельно.

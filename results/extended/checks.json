@@ -1,0 +1,23 @@
+{
+  "before": {
+    "authentication": "passed",
+    "generation": "passed",
+    "streaming": "passed",
+    "validation_error": "passed",
+    "private_path": "passed",
+    "log_privacy": "passed",
+    "response_characters": 112
+  },
+  "command": "python scripts/benchmark.py --requests 50 --concurrency-levels 1 2 4 --max-tokens 32 --warmup-requests 3 --ignore-eos --output results/extended/benchmark.json",
+  "after": {
+    "authentication": "passed",
+    "generation": "passed",
+    "streaming": "passed",
+    "validation_error": "passed",
+    "private_path": "passed",
+    "log_privacy": "passed",
+    "response_characters": 85
+  },
+  "configuration_unchanged": true,
+  "checked_at_utc": "2026-11-02T19:45:15.066376+00:00"
+}

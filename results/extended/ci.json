@@ -1,0 +1,74 @@
+{
+  "id": 41511651299,
+  "head_sha": "e05a3ec6e734bd572e431cad05678a13d382a602",
+  "status": "completed",
+  "conclusion": "success",
+  "html_url": "https://github.com/MusiJusi/kaspersky-vllm-cpu/actions/runs/41511651299",
+  "created_at": "2026-11-02T19:37:23Z",
+  "updated_at": "2026-11-02T19:50:11Z",
+  "jobs": [
+    {
+      "id": 125504708480,
+      "name": "cpu-integration",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Free disk space on the disposable runner",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0",
+          "conclusion": "success"
+        },
+        {
+          "name": "Unit tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install pinned cluster tools",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build rootless CPU images",
+          "conclusion": "success"
+        },
+        {
+          "name": "Create Minikube cluster and deploy",
+          "conclusion": "success"
+        },
+        {
+          "name": "Endpoint, privacy, offline cache, benchmark and restart",
+          "conclusion": "success"
+        },
+        {
+          "name": "Collect cluster status",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}

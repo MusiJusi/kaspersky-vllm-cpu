@@ -1,0 +1,83 @@
+{
+  "recorded_at_utc": "2026-11-02T19:38:20.071960+00:00",
+  "source_commit": "e05a3ec6e734bd572e431cad05678a13d382a602",
+  "client": {
+    "python": "3.14.6",
+    "platform": "Windows"
+  },
+  "runtime": {
+    "cpu": "AMD Ryzen 9 9955HX 16-Core Processor",
+    "python": "3.12.12",
+    "vllm": "0.27.1+cpu",
+    "torch": "2.13.0+cpu",
+    "cuda": null,
+    "uid": 10001,
+    "arguments": [
+      "/usr/local/bin/python",
+      "-m",
+      "vllm.entrypoints.openai.api_server",
+      "--host",
+      "0.0.0.0",
+      "--port",
+      "8000",
+      "--model",
+      "/models/HuggingFaceTB--SmolLM2-135M-Instruct/12fd25f77366fa6b3b4b768ec3050bf629380bac",
+      "--served-model-name",
+      "local-instruct",
+      "--dtype",
+      "bfloat16",
+      "--max-model-len",
+      "2048",
+      "--max-num-seqs",
+      "4",
+      "--max-num-batched-tokens",
+      "2048",
+      "--enable-prefix-caching",
+      "--enable-chunked-prefill",
+      "--enforce-eager",
+      "--no-enable-log-requests",
+      "--no-enable-log-outputs",
+      "--no-log-error-stack",
+      "--disable-uvicorn-access-log",
+      "--middleware",
+      "app.auth.BearerAuthMiddleware",
+      "--middleware",
+      "app.audit.RequestAuditMiddleware",
+      "--log-config-file",
+      "/app/config/logging.json",
+      ""
+    ]
+  },
+  "resources": {
+    "limits": {
+      "cpu": "6",
+      "memory": "8Gi"
+    },
+    "requests": {
+      "cpu": "2",
+      "memory": "4Gi"
+    }
+  },
+  "configmap_name": "vllm-settings-545484mhk8",
+  "configmap_data": {
+    "DO_NOT_TRACK": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "MODEL_ID": "HuggingFaceTB/SmolLM2-135M-Instruct",
+    "MODEL_REVISION": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+    "MODEL_ROOT": "/models",
+    "OMP_NUM_THREADS": "6",
+    "VLLM_CPU_KVCACHE_SPACE": "1",
+    "VLLM_CPU_OMP_THREADS_BIND": "auto",
+    "inference.json": "{\n  \"served_model_name\": \"local-instruct\",\n  \"dtype\": \"bfloat16\",\n  \"max_model_len\": 2048,\n  \"max_num_seqs\": 4,\n  \"max_num_batched_tokens\": 2048,\n  \"enable_prefix_caching\": true,\n  \"enable_chunked_prefill\": true,\n  \"enforce_eager\": true\n}\n"
+  },
+  "pod_uid": "6ac0af5b-cecd-4b5f-86ce-999eef39fe0f",
+  "containers": [
+    {
+      "name": "server",
+      "imageID": "sha256:80b05c159624b9a5338579f53337d1a0a34feee8d1553116fe48fe0d7d7397cc",
+      "restartCount": 1,
+      "ready": true
+    }
+  ],
+  "client_transport": "kubectl port-forward over localhost HTTP"
+}
