@@ -115,7 +115,7 @@ def main():
 
     offline_cache_check(args.context, deployment)
     kubectl(args.context, "rollout", "restart", "deployment/vllm")
-    kubectl(args.context, "rollout", "status", "deployment/vllm", "--timeout=15m")
+    kubectl(args.context, "rollout", "status", "deployment/vllm", "--timeout=30m")
     logs = kubectl(args.context, "logs", "deployment/vllm", "-c", "download-model")
     if '"model_cache_hit"' not in logs:
         raise RuntimeError("The restarted Pod did not use the local model cache.")

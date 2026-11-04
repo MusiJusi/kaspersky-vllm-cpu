@@ -9,7 +9,8 @@ import time
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--context", default="kaspersky-vllm-cpu")
-    parser.add_argument("--timeout", type=int, default=900)
+    parser.add_argument("--timeout", type=int, default=1800,
+                        help="Overall startup deadline in seconds, including the first model download.")
     args = parser.parse_args()
     command = ["kubectl", "--context", args.context, "-n", "llm-inference"]
     deadline = time.monotonic() + args.timeout

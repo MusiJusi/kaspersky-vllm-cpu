@@ -71,7 +71,7 @@ try {
     if ($taskExistingDeployment.Count -gt 0) {
         Invoke-Checked 'kubectl' @('--context', $ClusterProfile, '--namespace', $taskNamespace, 'rollout', 'restart', 'deployment/vllm')
     }
-    Invoke-Checked 'kubectl' @('--context', $ClusterProfile, '--namespace', $taskNamespace, 'rollout', 'status', 'deployment/vllm', '--timeout=15m')
+    Invoke-Checked 'kubectl' @('--context', $ClusterProfile, '--namespace', $taskNamespace, 'rollout', 'status', 'deployment/vllm', '--timeout=30m')
     Write-Host ('Ready. API token is stored locally in .local/api-token. Forward the API with: kubectl --context {0} -n llm-inference port-forward service/vllm 8000:8000' -f $ClusterProfile)
 } finally {
     Pop-Location

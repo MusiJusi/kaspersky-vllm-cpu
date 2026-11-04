@@ -74,6 +74,7 @@ Secret `vllm-secrets` подключается через `secretKeyRef`.
 | Изоляция | seccomp `RuntimeDefault`, namespace с Pod Security `restricted` |
 | Kubernetes API | ServiceAccount-токен не монтируется |
 | Состояние сервера | startup, readiness и liveness probes на `/health` |
+| Первый запуск | `progressDeadlineSeconds: 1800`, включая скачивание модели |
 | Обновление | Одна реплика, стратегия `Recreate`, PVC сохраняется |
 
 `enableServiceLinks: false` исключает конфликт переменных Service с настройками vLLM,

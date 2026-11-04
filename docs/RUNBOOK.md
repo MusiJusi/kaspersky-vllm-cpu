@@ -85,11 +85,13 @@ PY
 
 ```bash
 kubectl --context kaspersky-vllm-cpu apply -k k8s/overlays/ci
-kubectl --context kaspersky-vllm-cpu -n llm-inference rollout status deployment/vllm --timeout=15m
+kubectl --context kaspersky-vllm-cpu -n llm-inference rollout status deployment/vllm --timeout=30m
 python3 scripts/check_cluster.py
 ```
 
 Последняя команда проверяет API, кэш и перезапуск, самостоятельно управляя port-forward.
+Лимит первого запуска составляет 30 минут и включает скачивание модели.
+`progressDeadlineSeconds` в Deployment и ожидание в скриптах согласованы с этим лимитом.
 Для ручного обращения оставьте в отдельном терминале:
 
 ```bash

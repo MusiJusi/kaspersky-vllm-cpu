@@ -4,6 +4,7 @@ metadata:
   name: vllm
 spec:
   replicas: 1
+  progressDeadlineSeconds: 1800
   strategy:
     type: Recreate
   selector:
