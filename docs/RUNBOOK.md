@@ -5,7 +5,7 @@
 ## Окружение
 
 Серверные образы рассчитаны на Linux amd64 и Python 3.12.
-Для клиентских скриптов нужен Python 3.12+, для сборки — Docker с BuildKit.
+Для клиентских скриптов нужен Python 3.12+, для сборки требуется Docker с BuildKit.
 Проверены Minikube 1.39.0 и Kubernetes 1.37.0.
 
 | Профиль | Кластер | Лимит сервера | dtype / OpenMP |
@@ -96,8 +96,8 @@ python3 scripts/check_cluster.py
 kubectl --context kaspersky-vllm-cpu -n llm-inference port-forward service/vllm 8000:8000
 ```
 
-Для нового кластера с BF16 в шаге 1 используются `--cpus=6 --memory=10240`,
-а в шаге 3 — `k8s/overlays/local`.
+Для нового кластера с BF16 в шаге 1 используются `--cpus=6 --memory=10240`.
+В шаге 3 применяется `k8s/overlays/local`.
 
 ## Токены и конфигурация
 
@@ -139,7 +139,7 @@ kubectl --context kaspersky-vllm-cpu -n llm-inference logs deployment/vllm -c se
 
 ## Сборка и зависимости
 
-Прямые зависимости — `requirements.in` и `downloader/requirements.in`.
+Прямые зависимости указаны в `requirements.in` и `downloader/requirements.in`.
 Полные `requirements.txt` фиксируют транзитивные зависимости и SHA256.
 Для обновления используется `uv==0.13.6`:
 
